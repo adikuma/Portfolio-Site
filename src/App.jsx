@@ -9,6 +9,7 @@ import {
   ExternalLink,
   Mail,
   Send,
+  ArrowRight
 } from "lucide-react";
 import profileImage from "./assets/profile-pic.jpg";
 import resume from "./assets/Resume.pdf";
@@ -302,24 +303,25 @@ const Portfolio = () => {
       {/* Projects Section */}
       <div className="px-6 mb-8">
         <h2 className="text-sm text-gray-500 uppercase mb-6">Projects</h2>
-        <div className="space-y-6 ">
+        <div className="space-y-3 ">
           {projects.map((project, index) => (
             <a
               key={index}
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between group border-b p-4 hover:bg-gray-100 transition-colors duration-300"
+              className={`flex items-center justify-between group px-4 py-2 transition-colors duration-300 `}
             >
               <div>
-                <h3 className={`text-md font-medium group-hover:text-gray-400 transition-colors ${darkMode ? "text-blue-500" : "text-orange-500"}`}>
+                <h3
+                  className={`text-md font-medium transition-colors ${
+                    darkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
                   {project.title}
                 </h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  {project.description}
-                </p>
               </div>
-              <ExternalLink className="w-5 h-5 text-gray-500 flex-shrink-0 ml-4" />
+              <ArrowRight className="w-5 h-5 text-gray-500 flex-shrink-0 ml-4" />
             </a>
           ))}
         </div>
@@ -327,8 +329,10 @@ const Portfolio = () => {
 
       {/* Floating Bottom Navbar */}
       <div
-        className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-4 px-6 py-3 border rounded-full shadow-lg z-50 backdrop-blur-lg bg-opacity-20 ${
-          darkMode ? "bg-gray-800" : "bg-gray-200 border-gray-300"
+        className={`fixed bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-4 px-6 py-3 rounded-full shadow-lg z-50 backdrop-blur-lg bg-opacity-20 ${
+          darkMode
+            ? "bg-gray-800 border border-gray-700"
+            : "bg-gray-200 border border-gray-300"
         }`}
       >
         {/* Command K */}
@@ -350,73 +354,75 @@ const Portfolio = () => {
           )}
         </button>
 
-        <a href={resume} download className={`p-2 ${darkMode ? "text-white" : "text-black"}`}>
+        <a
+          href={resume}
+          download
+          className={`p-2 ${darkMode ? "text-white" : "text-black"}`}
+        >
           <Download className="w-6 h-6" />
         </a>
       </div>
 
-          {/* Email Form Popup */}
-          {showEmailForm && (
-            <div
-              className={`fixed bottom-28 left-1/2 transform -translate-x-1/2 z-50 w-80 p-4 rounded-xl shadow-lg border ${
+      {/* Email Form Popup */}
+      {showEmailForm && (
+        <div
+          className={`fixed bottom-28 left-1/2 transform -translate-x-1/2 z-50 w-80 p-4 rounded-xl shadow-lg border ${
+            darkMode
+              ? "bg-opacity-80 bg-gray-900 border-gray-700 backdrop-blur-md"
+              : "bg-opacity-90 bg-white border-gray-200 backdrop-blur-md"
+          }`}
+        >
+          <h3
+            className={`text-lg font-semibold ${
+              darkMode ? "text-gray-100" : "text-gray-800"
+            }`}
+          >
+            Send an Email
+          </h3>
+
+          <span
+            className={`text-sm ${
+              darkMode ? "text-gray-400" : "text-gray-600"
+            }`}
+          >
+            to adityakuma0308@gmail.com
+          </span>
+          <input
+            type="text"
+            placeholder="Subject"
+            value={emailSubject}
+            onChange={(e) => setEmailSubject(e.target.value)}
+            className={`w-full mb-2 p-2 mt-4 rounded border text-sm ${
+              darkMode
+                ? "bg-gray-700 bg-opacity-0 text-gray-200 placeholder-gray-400 border-gray-700"
+                : "bg-gray-100 text-gray-800 placeholder-gray-500 border-gray-400"
+            }`}
+          />
+          <textarea
+            placeholder="Message"
+            value={emailMessage}
+            onChange={(e) => setEmailMessage(e.target.value)}
+            className={`w-full p-2 rounded text-sm mb-2 border ${
+              darkMode
+                ? "bg-gray-700 bg-opacity-0 text-gray-200 placeholder-gray-400 border-gray-700"
+                : "bg-gray-100 text-gray-800 placeholder-gray-500 border-gray-400"
+            }`}
+            rows="3"
+          />
+          <div className="flex justify-end">
+            <button
+              onClick={handleSendEmail}
+              className={`transition ${
                 darkMode
-                  ? "bg-opacity-80 bg-gray-900 border-gray-700 backdrop-blur-md"
-                  : "bg-opacity-90 bg-white border-gray-200 backdrop-blur-md"
+                  ? "text-white hover:text-blue-700"
+                  : "text-gray-800 hover:text-orange-500"
               }`}
             >
-
-              <h3
-                className={`text-lg font-semibold ${
-                  darkMode ? "text-gray-100" : "text-gray-800"
-                }`}
-              >
-                Send an Email
-              </h3>
-
-              
-              <span
-                className={`text-sm ${
-                  darkMode ? "text-gray-400" : "text-gray-600"
-                }`}
-              >
-                to adityakuma0308@gmail.com
-              </span>
-              <input
-                type="text"
-                placeholder="Subject"
-                value={emailSubject}
-                onChange={(e) => setEmailSubject(e.target.value)}
-                className={`w-full mb-2 p-2 mt-4 rounded border text-sm ${
-                  darkMode
-                    ? "bg-gray-700 bg-opacity-0 text-gray-200 placeholder-gray-400 border-gray-700"
-                    : "bg-gray-100 text-gray-800 placeholder-gray-500 border-gray-400"
-                }`}
-              />
-              <textarea
-                placeholder="Message"
-                value={emailMessage}
-                onChange={(e) => setEmailMessage(e.target.value)}
-                className={`w-full p-2 rounded text-sm mb-2 border ${
-                  darkMode
-                    ? "bg-gray-700 bg-opacity-0 text-gray-200 placeholder-gray-400 border-gray-700"
-                    : "bg-gray-100 text-gray-800 placeholder-gray-500 border-gray-400"
-                }`}
-                rows="3"
-              />
-              <div className="flex justify-end">
-                <button
-                  onClick={handleSendEmail}
-                  className={`transition ${
-                    darkMode
-                      ? "text-white hover:text-blue-700"
-                      : "text-gray-800 hover:text-orange-500"
-                  }`}
-                >
-                  <Send className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          )}
+              <Send className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 
