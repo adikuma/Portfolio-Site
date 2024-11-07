@@ -21,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = OpenAI(api_key='sk-cAqEOuDHGqqrN0KGfFV1Z5kkHIMjYo-fR_C6sWdmOHT3BlbkFJwQ3T4FnvfIK0gAdOIVLt48gEyXajBzvd5TubTMoN4A')
+client = OpenAI(api_key='API_KEY')
 session_histories: Dict[str, List[Dict[str, str]]] = defaultdict(list)
 
 class ChatMessage(BaseModel):
