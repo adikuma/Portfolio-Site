@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import your custom font in index.css */
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('./assets/Manrope_Complete/Fonts/TTF/Manrope-Variable.ttf') format('truetype');
+}
+
+body {
+  font-family: 'MyCustomFont', sans-serif;
+}

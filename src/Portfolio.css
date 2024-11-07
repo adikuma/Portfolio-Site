@@ -1,0 +1,28 @@
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.previous-roles {
+  animation: slideDown 0.3s ease;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import your custom font in index.css */
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('./assets/Manrope_Complete/Fonts/TTF/Manrope-Variable.ttf') format('truetype');
+}
+
+body {
+  font-family: 'MyCustomFont', sans-serif;
+}
