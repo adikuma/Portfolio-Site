@@ -1,7 +1,5 @@
 # Aditya Kumar's Portfolio
 
-![Portfolio Banner](./assets/banner.jpg)
-
 ## Hi, I'm Aditya Kumar 👋
 
 Welcome to my personal portfolio website! I'm an AI Engineer and Full Stack Developer based in Singapore, passionate about creating innovative AI systems and building user-centric applications.
