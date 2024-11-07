@@ -62,10 +62,3 @@ I'm excited about the potential of integrating **Retrieval-Augmented Generation 
 - **Interactive Learning:**  
   Continuous learning from interactions to better serve your inquiries.
 
-## 📈 Getting Started
-
-If you're interested in exploring the code or contributing, feel free to check out the repository:
-
-```bash
-git clone https://github.com/adikuma/portfolio.git
-cd portfolio
