@@ -123,8 +123,8 @@ const CommandSearch = ({ isOpen, onClose, darkMode }) => {
       <div
         className={`w-full max-w-2xl rounded-3xl shadow-2xl flex flex-col ${
           darkMode
-            ? "bg-black bg-opacity-50 border border-gray-300"
-            : "bg-black bg-opacity-50 border border-gray-300"
+            ? "bg-black bg-opacity-70 border border-gray-300"
+            : "bg-black bg-opacity-70 border border-gray-300"
         } `}
         onClick={(e) => e.stopPropagation()}
       >
@@ -162,7 +162,7 @@ const CommandSearch = ({ isOpen, onClose, darkMode }) => {
             <>
               <div
                 className={`flex items-center px-3 py-2 mb-2 text-sm rounded-md ${
-                  darkMode ? "text-yellow-700" : "text-yellow-100"
+                  darkMode ? "text-yellow-500" : "text-yellow-100"
                 }`}
               >
                 <AlertTriangle className="w-5 h-5 mr-2" />

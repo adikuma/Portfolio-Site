@@ -253,7 +253,7 @@ const Portfolio = () => {
                 }`}
               />
             </a>
-            <button
+            {/* <button
               onClick={() => setShowEmailForm(!showEmailForm)}
               className={`p-4 rounded-full ${
                 darkMode
@@ -262,7 +262,7 @@ const Portfolio = () => {
               } transition-colors duration-300`}
             >
               <Mail className="w-5 h-5" />
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
@@ -355,46 +355,68 @@ const Portfolio = () => {
         </a>
       </div>
 
-      {/* Email Form opup */}
-      {showEmailForm && (
-        <div
-          className={`fixed bottom-24 left-4 right-4 z-50 p-4 rounded-xl shadow-lg border ${
-            darkMode
-              ? "bg-gray-900 border-gray-700 bg-opacity-95"
-              : "bg-white border-gray-200 bg-opacity-95"
-          }`}
-        >
-          <h3 className="text-lg mb-2">Send Me an Email</h3>
-          <input
-            type="text"
-            placeholder="Subject"
-            value={emailSubject}
-            onChange={(e) => setEmailSubject(e.target.value)}
-            className={`w-full p-2 mb-2 border rounded ${
-              darkMode
-                ? "bg-gray-800 border-gray-700 text-white placeholder-gray-500"
-                : "bg-gray-100 border-gray-300 text-gray-800 placeholder-gray-500"
-            }`}
-          />
-          <textarea
-            placeholder="Message"
-            value={emailMessage}
-            onChange={(e) => setEmailMessage(e.target.value)}
-            className={`w-full p-2 mb-2 border rounded ${
-              darkMode
-                ? "bg-gray-800 border-gray-700 text-white placeholder-gray-500"
-                : "bg-gray-100 border-gray-300 text-gray-800 placeholder-gray-500"
-            }`}
-            rows="4"
-          ></textarea>
-          <button
-            onClick={handleSendEmail}
-            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors duration-300"
-          >
-            Send
-          </button>
-        </div>
-      )}
+          {/* Email Form Popup */}
+          {showEmailForm && (
+            <div
+              className={`fixed bottom-28 left-1/2 transform -translate-x-1/2 z-50 w-80 p-4 rounded-xl shadow-lg border ${
+                darkMode
+                  ? "bg-opacity-80 bg-gray-900 border-gray-700 backdrop-blur-md"
+                  : "bg-opacity-90 bg-white border-gray-200 backdrop-blur-md"
+              }`}
+            >
+
+              <h3
+                className={`text-lg font-semibold ${
+                  darkMode ? "text-gray-100" : "text-gray-800"
+                }`}
+              >
+                Send an Email
+              </h3>
+
+              
+              <span
+                className={`text-sm ${
+                  darkMode ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
+                to adityakuma0308@gmail.com
+              </span>
+              <input
+                type="text"
+                placeholder="Subject"
+                value={emailSubject}
+                onChange={(e) => setEmailSubject(e.target.value)}
+                className={`w-full mb-2 p-2 mt-4 rounded border text-sm ${
+                  darkMode
+                    ? "bg-gray-700 bg-opacity-0 text-gray-200 placeholder-gray-400 border-gray-700"
+                    : "bg-gray-100 text-gray-800 placeholder-gray-500 border-gray-400"
+                }`}
+              />
+              <textarea
+                placeholder="Message"
+                value={emailMessage}
+                onChange={(e) => setEmailMessage(e.target.value)}
+                className={`w-full p-2 rounded text-sm mb-2 border ${
+                  darkMode
+                    ? "bg-gray-700 bg-opacity-0 text-gray-200 placeholder-gray-400 border-gray-700"
+                    : "bg-gray-100 text-gray-800 placeholder-gray-500 border-gray-400"
+                }`}
+                rows="3"
+              />
+              <div className="flex justify-end">
+                <button
+                  onClick={handleSendEmail}
+                  className={`transition ${
+                    darkMode
+                      ? "text-white hover:text-blue-700"
+                      : "text-gray-800 hover:text-orange-500"
+                  }`}
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          )}
     </div>
   );
 
@@ -722,8 +744,8 @@ const Portfolio = () => {
               onClick={toggleFont}
               className={`p-2 rounded-full transition-transform transform hover:scale-110 ${
                 darkMode
-                  ? "text-gray-400 hover:text-blue-500"
-                  : "text-gray-800 hover:text-orange-500"
+                  ? "text-gray-200 hover:text-blue-500"
+                  : "text-black hover:text-orange-500"
               }`}
             >
               Aa
@@ -755,7 +777,7 @@ const Portfolio = () => {
             </a>
 
             {/* Email Form Toggle Button */}
-            <button
+            {/* <button
               onClick={() => setShowEmailForm((prev) => !prev)}
               className={`p-2 rounded-full transition-transform transform hover:scale-110 ${
                 darkMode
@@ -764,7 +786,7 @@ const Portfolio = () => {
               }`}
             >
               <Mail className="w-5 h-5" />
-            </button>
+            </button> */}
 
             {/* GitHub Link */}
             <a
