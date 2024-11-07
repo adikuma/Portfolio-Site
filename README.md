@@ -24,29 +24,7 @@ This portfolio showcases my professional experiences, projects, and skills. It's
 - **Others:**  
   - [UUID](https://github.com/uuidjs/uuid) - For generating unique session IDs.
   - [Vite](https://vitejs.dev/) - A build tool that aims to provide a faster and leaner development experience for modern web projects.
-
-## ✨ Features
-
-- **Responsive Design:**  
-  Seamlessly adapts to both desktop and mobile devices to provide an optimal viewing experience.
-
-- **Dark Mode:**  
-  Toggle between light and dark themes to suit your preference.
-
-- **Experience Timeline:**  
-  Highlighting my professional journey and roles over time.
-
-- **Project Showcase:**  
-  Displaying a variety of projects with descriptions and links to their repositories.
-
-- **AI-Powered Chat Assistant:**  
-  An interactive chat feature that allows you to ask questions about my portfolio and receive instant responses.
-
-- **Font Customization:**  
-  Easily switch between different font styles to enhance readability and aesthetics.
-
-- **Downloadable Resume:**  
-  Access and download my resume directly from the website.
+  
 
 ## 🔮 Future Plans
 
