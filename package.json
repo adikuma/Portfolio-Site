@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "vite preview"
+  }
   },
   "dependencies": {
     "cors": "^2.8.5",
