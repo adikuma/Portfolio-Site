@@ -93,13 +93,11 @@ const CommandSearch = ({ isOpen, onClose, darkMode }) => {
 
     setTimeout(() => {
       if (predefinedResponses[message]) {
-        // Use predefined response if it exists
         setMessages((prev) => [
           ...prev,
           { text: predefinedResponses[message], isAi: true },
         ]);
       } else {
-        // Response for non-predefined input
         setMessages((prev) => [
           ...prev,
           {
@@ -123,13 +121,13 @@ const CommandSearch = ({ isOpen, onClose, darkMode }) => {
       <div
         className={`w-full max-w-2xl rounded-3xl shadow-2xl flex flex-col ${
           darkMode
-            ? "bg-black bg-opacity-70 border border-gray-300"
+            ? "bg-black bg-opacity-70 border border-gray-500"
             : "bg-black bg-opacity-70 border border-gray-300"
         } `}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Bar */}
-        <div className="flex items-center p-4 border-b border-gray-300 ">
+        <div className={`flex items-center p-4 ${darkMode? "border-b border-gray-500": "border-b border-gray-300"} `}>
           <Search className="w-5 h-5 text-gray-400 mr-3" />
           <input
             ref={inputRef}
@@ -210,11 +208,11 @@ const CommandSearch = ({ isOpen, onClose, darkMode }) => {
         </div>
 
         {/* Footer */}
-        <div className="px-4 py-3 border-t border-gray-300 text-xs text-gray-400 flex items-center justify-between">
+        <div className={`px-4 py-3 ${darkMode? "border-t border-gray-500": "border-t border-gray-300"} text-xs text-gray-400 flex items-center justify-between`}>
           <div className="flex items-center gap-2">
-            <span className="px-2 py-1 rounded-md bg-gray-800">↵</span>
+            <span className={`px-2 py-1 rounded-md ${darkMode? "bg-gray-800": "bg-gray-200 text-black"} `}>↵</span>
             <span>to send</span>
-            <span className="px-2 py-1 rounded-md bg-gray-800">esc</span>
+            <span className={`px-2 py-1 rounded-md ${darkMode? "bg-gray-800": "bg-gray-200 text-black"} `}>esc</span>
             <span>to close</span>
           </div>
         </div>

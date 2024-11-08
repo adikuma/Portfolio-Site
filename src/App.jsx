@@ -269,11 +269,11 @@ const Portfolio = () => {
       </div>
 
       {/* Experiences Section */}
-      <div className="px-6 mb-8">
-        <h2 className="text-sm text-gray-500 uppercase mb-4">Experiences</h2>
-        <div className="relative space-y-4 pl-4">
+      <div className="px-4 mb-8">
+        <h2 className="text-sm text-gray-500 uppercase mb-2">Experiences</h2>
+        <div className="relative space-y-4 pl-2">
           {/* Vertical line */}
-          <div className="absolute top-0 left-4 bottom-0 w-[2px] bg-gray-300 dark:bg-gray-700"></div>
+          <div className="absolute top-0 left-4 bottom-0 w-[1px] bg-gray-300 dark:bg-gray-700"></div>
           {experiences.map((exp, index) => (
             <div key={index} className="relative flex flex-col ml-6">
               {/* Circular marker */}
@@ -289,7 +289,7 @@ const Portfolio = () => {
 
       {/* About Section */}
       <div className="px-6 mb-8">
-        <h2 className="text-sm text-gray-500 uppercase mb-4">About</h2>
+        <h2 className="text-sm text-gray-500 uppercase mb-2">About</h2>
         <p
           className={`${darkMode ? "text-gray-400" : "text-gray-800"} text-sm`}
         >
@@ -302,7 +302,7 @@ const Portfolio = () => {
 
       {/* Projects Section */}
       <div className="px-6 mb-8">
-        <h2 className="text-sm text-gray-500 uppercase mb-6">Projects</h2>
+        <h2 className="text-sm text-gray-500 uppercase mb-2">Projects</h2>
         <div className="space-y-3 ">
           {projects.map((project, index) => (
             <a
@@ -310,7 +310,7 @@ const Portfolio = () => {
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className={`flex items-center justify-between group px-4 py-2 transition-colors duration-300 `}
+              className={`flex items-center justify-between group px-4 py-7 transition-colors duration-300 border rounded-lg ${ darkMode? "border-gray-700" : "border-gray-300"}`}
             >
               <div>
                 <h3
@@ -320,6 +320,13 @@ const Portfolio = () => {
                 >
                   {project.title}
                 </h3>
+                <h6
+                  className={`text-xs transition-colors ${
+                    darkMode ? "text-gray-400" : "text-gray-900"
+                  }`}
+                >
+                  {project.description}
+                </h6>
               </div>
               <ArrowRight className="w-5 h-5 text-gray-500 flex-shrink-0 ml-4" />
             </a>
@@ -336,7 +343,7 @@ const Portfolio = () => {
         }`}
       >
         {/* Command K */}
-        <button onClick={() => setIsSearchOpen(true)} className="p-2 ">
+        <button onClick={() => setIsSearchOpen(true)} className="py-2 px-2 ">
           <span className="text-sm">Ask me anything</span>
         </button>
 
