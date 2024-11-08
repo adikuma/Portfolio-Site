@@ -199,9 +199,9 @@ const Portfolio = () => {
     const sheetRef = useRef(null);
   
     // Heights for different states
-    const minHeight = window.innerHeight - 100; // Just handle showing
-    const halfHeight = window.innerHeight / 2; // Half screen
-    const maxHeight = 100; // Nearly full screen
+    const minHeight = window.innerHeight - 100; // Closed position
+    const halfHeight = window.innerHeight / 2; // Half-open
+    const maxHeight = 100; // Fully open
   
     // Handle mouse events
     const handleMouseDown = (e) => {
@@ -211,7 +211,7 @@ const Portfolio = () => {
   
     const handleMouseMove = (e) => {
       if (!isDragging) return;
-      
+  
       const deltaY = e.clientY - startY;
       const newY = Math.max(maxHeight, Math.min(minHeight, currentY + deltaY));
       setCurrentY(newY);
@@ -231,7 +231,7 @@ const Portfolio = () => {
   
     const handleTouchMove = (e) => {
       if (!isDragging) return;
-      
+  
       const deltaY = e.touches[0].clientY - startY;
       const newY = Math.max(maxHeight, Math.min(minHeight, currentY + deltaY));
       setCurrentY(newY);
@@ -242,18 +242,14 @@ const Portfolio = () => {
       handleDragEnd();
     };
   
-    // Common drag end handler
+    // Enhanced snapping logic to snap to the closest point
     const handleDragEnd = () => {
       setIsDragging(false);
-      
-      // Snap to nearest position
-      if (currentY > minHeight - 100) {
-        setCurrentY(minHeight); // Snap to closed
-      } else if (currentY > halfHeight) {
-        setCurrentY(halfHeight); // Snap to half
-      } else {
-        setCurrentY(maxHeight); // Snap to open
-      }
+      const snapPoints = [maxHeight, halfHeight, minHeight];
+      const closestSnapPoint = snapPoints.reduce((prev, curr) => {
+        return Math.abs(curr - currentY) < Math.abs(prev - currentY) ? curr : prev;
+      }, snapPoints[0]);
+      setCurrentY(closestSnapPoint);
     };
   
     // Add global mouse event listeners
@@ -270,16 +266,39 @@ const Portfolio = () => {
         }
       };
   
-      document.addEventListener('mousemove', handleGlobalMouseMove);
-      document.addEventListener('mouseup', handleGlobalMouseUp);
+      document.addEventListener("mousemove", handleGlobalMouseMove);
+      document.addEventListener("mouseup", handleGlobalMouseUp);
   
       return () => {
-        document.removeEventListener('mousemove', handleGlobalMouseMove);
-        document.removeEventListener('mouseup', handleGlobalMouseUp);
+        document.removeEventListener("mousemove", handleGlobalMouseMove);
+        document.removeEventListener("mouseup", handleGlobalMouseUp);
       };
-    }, [isDragging]);
+    }, [isDragging, currentY, startY]);
   
-    // Add button to demonstrate opening
+    // Add global touch event listeners
+    useEffect(() => {
+      const handleGlobalTouchMove = (e) => {
+        if (isDragging) {
+          handleTouchMove(e);
+        }
+      };
+  
+      const handleGlobalTouchEnd = () => {
+        if (isDragging) {
+          handleTouchEnd();
+        }
+      };
+  
+      document.addEventListener("touchmove", handleGlobalTouchMove);
+      document.addEventListener("touchend", handleGlobalTouchEnd);
+  
+      return () => {
+        document.removeEventListener("touchmove", handleGlobalTouchMove);
+        document.removeEventListener("touchend", handleGlobalTouchEnd);
+      };
+    }, [isDragging, currentY, startY]);
+  
+    // Function to open the sheet to the fully open position
     const handleOpen = () => {
       setCurrentY(maxHeight);
     };
@@ -288,45 +307,54 @@ const Portfolio = () => {
       <>
         {/* Backdrop overlay when sheet is opened */}
         {currentY < minHeight - 100 && (
-          <div 
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-0 transition-opacity duration-300"
+          <div
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300"
             style={{
-              opacity: 1 - (currentY / minHeight)
+              opacity: 1 - currentY / minHeight,
+              zIndex: 10, // Ensure it's below the navbar (z-50)
             }}
           />
         )}
-        
+  
         <div
           ref={sheetRef}
-          className={`fixed left-0 right-0 z-0 transition-transform duration-300 ease-out ${
-            isDragging ? 'transition-none' : ''
+          className={`fixed left-0 right-0 transition-transform duration-300 ease-out ${
+            isDragging ? "transition-none" : ""
           }`}
           style={{
             transform: `translateY(${currentY}px)`,
             height: `calc(100vh - ${maxHeight}px)`,
+            zIndex: 20, // Lower than navbar's z-50
           }}
         >
           {/* Sheet Content */}
           <div
             className={`w-full h-full rounded-t-3xl shadow-lg border ${
-              darkMode 
-                ? 'bg-black/70 border-gray-700/50 backdrop-blur-xl' 
-                : 'bg-white/70 border-gray-200/50 backdrop-blur-xl'
+              darkMode
+                ? "bg-black/70 border-gray-700/50 backdrop-blur-xl"
+                : "bg-white/70 border-gray-200/50 backdrop-blur-xl"
             }`}
           >
             {/* Draggable Handle */}
             <div
-              className="w-full py-4 touch-none cursor-grab active:cursor-grabbing select-none"
+              className="w-full py-4 touch-none cursor-grab active:cursor-grabbing select-none relative"
               onMouseDown={handleMouseDown}
               onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
             >
-              <div className={`w-12 h-1 mx-auto rounded-full ${darkMode ? 'bg-gray-600' : 'bg-gray-300'}`} />
-              <button 
-                onClick={handleOpen}
-                className={`absolute right-4 top-4 text-sm ${
-                  darkMode ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-800'
+              <div
+                className={`w-12 h-1 mx-auto rounded-full ${
+                  darkMode ? "bg-gray-600" : "bg-gray-300"
+                }`}
+              />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent triggering drag events
+                  handleOpen();
+                }}
+                className={`absolute right-4 top-2 text-sm ${
+                  darkMode
+                    ? "text-gray-400 hover:text-gray-300"
+                    : "text-gray-600 hover:text-gray-800"
                 }`}
               >
                 Open
@@ -335,13 +363,20 @@ const Portfolio = () => {
   
             {/* Projects Header */}
             <div className="px-6">
-              <h2 className={`text-sm uppercase mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              <h2
+                className={`text-sm uppercase mb-4 ${
+                  darkMode ? "text-gray-400" : "text-gray-500"
+                }`}
+              >
                 Projects
               </h2>
             </div>
   
             {/* Projects List */}
-            <div className="px-6 overflow-y-auto" style={{ height: 'calc(100% - 80px)' }}>
+            <div
+              className="px-6 overflow-y-auto"
+              style={{ height: "calc(100% - 80px)" }}
+            >
               <div className="space-y-3">
                 {projects.map((project, index) => (
                   <a
@@ -350,30 +385,34 @@ const Portfolio = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`flex items-center justify-between group px-4 py-7 transition-all duration-300 border rounded-lg hover:scale-[1.02] ${
-                      darkMode 
-                        ? 'border-gray-700/50 bg-gray-800/50 hover:bg-gray-800/70' 
-                        : 'border-gray-200/50 bg-white/50 hover:bg-white/70'
+                      darkMode
+                        ? "border-gray-700/50 bg-gray-800/50 hover:bg-gray-800/70"
+                        : "border-gray-200/50 bg-white/50 hover:bg-white/70"
                     }`}
                   >
                     <div>
                       <h3
                         className={`text-md font-medium transition-colors ${
-                          darkMode ? 'text-white' : 'text-gray-900'
+                          darkMode ? "text-white" : "text-gray-900"
                         }`}
                       >
                         {project.title}
                       </h3>
                       <h6
                         className={`text-xs transition-colors ${
-                          darkMode ? 'text-gray-400' : 'text-gray-600'
+                          darkMode ? "text-gray-400" : "text-gray-600"
                         }`}
                       >
                         {project.description}
                       </h6>
                     </div>
-                    <ArrowRight className={`w-5 h-5 flex-shrink-0 ml-4 ${
-                      darkMode ? 'text-gray-500 group-hover:text-gray-400' : 'text-gray-400 group-hover:text-gray-600'
-                    }`} />
+                    <ArrowRight
+                      className={`w-5 h-5 flex-shrink-0 ml-4 ${
+                        darkMode
+                          ? "text-gray-500 group-hover:text-gray-400"
+                          : "text-gray-400 group-hover:text-gray-600"
+                      }`}
+                    />
                   </a>
                 ))}
               </div>
@@ -383,9 +422,9 @@ const Portfolio = () => {
       </>
     );
   };
+  
     
   const MobileLayout = () => {
-    const [showModal, setShowModal] = useState(false);
     const [showEmailForm, setShowEmailForm] = useState(false);
     const [emailSubject, setEmailSubject] = useState('');
     const [emailMessage, setEmailMessage] = useState('');
@@ -416,7 +455,7 @@ const Portfolio = () => {
     }, []);
   
     return (
-      <div className="flex flex-col min-h-screen pb-4">
+      <div className="flex flex-col my-auto ">
         {/* Profile Section */}
         <div className="px-6 pt-8">
           <div className="flex flex-col items-center">
@@ -610,26 +649,7 @@ const Portfolio = () => {
             </div>
           </div>
         )}
-  
-        {/* Modal for Profile Image */}
-        {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-md flex items-center justify-center z-50">
-            <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-xs w-full">
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-2 right-4 text-xl text-gray-200 dark:text-gray-200 hover:text-gray-300 dark:hover:text-gray-200"
-              >
-                &times;
-              </button>
-              <img
-                src={profileImage}
-                alt="Aditya Kumar"
-                className="w-full h-auto rounded-lg object-cover"
-              />
-            </div>
-          </div>
-        )}
-  
+    
         {/* Bottom Sheet Projects */}
         <BottomSheet projects={projects} darkMode={darkMode} />
       </div>
