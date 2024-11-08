@@ -10,6 +10,7 @@ import {
   Mail,
   Send,
   ArrowRight,
+  ChevronUp,
 } from "lucide-react";
 import profileImage from "./assets/profile-pic.jpg";
 import resume from "./assets/Resume.pdf";
@@ -190,141 +191,35 @@ const Portfolio = () => {
       bgColor: "from-yellow-300 to-red-900",
     },
   ];
-  
 
   const BottomSheet = ({ projects, darkMode }) => {
-    const [isDragging, setIsDragging] = useState(false);
-    const [startY, setStartY] = useState(0);
-    const [currentY, setCurrentY] = useState(window.innerHeight - 100);
-    const sheetRef = useRef(null);
-  
-    // Heights for different states
-    const minHeight = window.innerHeight - 100; // Closed position
-    const halfHeight = window.innerHeight / 2; // Half-open
-    const maxHeight = 100; // Fully open
-  
-    // Handle mouse events
-    const handleMouseDown = (e) => {
-      setIsDragging(true);
-      setStartY(e.clientY);
-    };
-  
-    const handleMouseMove = (e) => {
-      if (!isDragging) return;
-  
-      const deltaY = e.clientY - startY;
-      const newY = Math.max(maxHeight, Math.min(minHeight, currentY + deltaY));
-      setCurrentY(newY);
-      setStartY(e.clientY);
-    };
-  
-    const handleMouseUp = () => {
-      if (!isDragging) return;
-      handleDragEnd();
-    };
-  
-    // Handle touch events
-    const handleTouchStart = (e) => {
-      setIsDragging(true);
-      setStartY(e.touches[0].clientY);
-    };
-  
-    const handleTouchMove = (e) => {
-      if (!isDragging) return;
-  
-      const deltaY = e.touches[0].clientY - startY;
-      const newY = Math.max(maxHeight, Math.min(minHeight, currentY + deltaY));
-      setCurrentY(newY);
-      setStartY(e.touches[0].clientY);
-    };
-  
-    const handleTouchEnd = () => {
-      handleDragEnd();
-    };
-  
-    // Enhanced snapping logic to snap to the closest point
-    const handleDragEnd = () => {
-      setIsDragging(false);
-      const snapPoints = [maxHeight, halfHeight, minHeight];
-      const closestSnapPoint = snapPoints.reduce((prev, curr) => {
-        return Math.abs(curr - currentY) < Math.abs(prev - currentY) ? curr : prev;
-      }, snapPoints[0]);
-      setCurrentY(closestSnapPoint);
-    };
-  
-    // Add global mouse event listeners
-    useEffect(() => {
-      const handleGlobalMouseMove = (e) => {
-        if (isDragging) {
-          handleMouseMove(e);
-        }
-      };
-  
-      const handleGlobalMouseUp = () => {
-        if (isDragging) {
-          handleMouseUp();
-        }
-      };
-  
-      document.addEventListener("mousemove", handleGlobalMouseMove);
-      document.addEventListener("mouseup", handleGlobalMouseUp);
-  
-      return () => {
-        document.removeEventListener("mousemove", handleGlobalMouseMove);
-        document.removeEventListener("mouseup", handleGlobalMouseUp);
-      };
-    }, [isDragging, currentY, startY]);
-  
-    // Add global touch event listeners
-    useEffect(() => {
-      const handleGlobalTouchMove = (e) => {
-        if (isDragging) {
-          handleTouchMove(e);
-        }
-      };
-  
-      const handleGlobalTouchEnd = () => {
-        if (isDragging) {
-          handleTouchEnd();
-        }
-      };
-  
-      document.addEventListener("touchmove", handleGlobalTouchMove);
-      document.addEventListener("touchend", handleGlobalTouchEnd);
-  
-      return () => {
-        document.removeEventListener("touchmove", handleGlobalTouchMove);
-        document.removeEventListener("touchend", handleGlobalTouchEnd);
-      };
-    }, [isDragging, currentY, startY]);
-  
-    // Function to open the sheet to the fully open position
-    const handleOpen = () => {
-      setCurrentY(maxHeight);
-    };
-  
+    const [isOpen, setIsOpen] = useState(false);
+    
+    // Changed position values to be more appropriate for mobile viewport
+    const sheetHeight = "90vh"; // Use viewport height instead of fixed pixels
+    const closedPosition = "80vh"; // Almost at the bottom when closed
+    const openPosition = "0vh"; // Shows most of the content when open
+    
     return (
       <>
         {/* Backdrop overlay when sheet is opened */}
-        {currentY < minHeight - 100 && (
+        {isOpen && (
           <div
             className="fixed inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300"
             style={{
-              opacity: 1 - currentY / minHeight,
-              zIndex: 10, // Ensure it's below the navbar (z-50)
+              opacity: 1,
+              zIndex: 40, // Increased z-index to ensure it's above other content
             }}
+            onClick={() => setIsOpen(false)} // Close sheet when clicking backdrop
           />
         )}
-  
+    
         <div
-          ref={sheetRef}
-          className={`fixed left-0 right-0 transition-transform duration-300 ease-out ${
-            isDragging ? "transition-none" : ""
-          }`}
+          className={`fixed left-0 right-0 bottom-0 transition-transform duration-300 ease-out`}
           style={{
-            transform: `translateY(${currentY}px)`,
-            height: `calc(100vh - ${maxHeight}px)`,
-            zIndex: 20, // Lower than navbar's z-50
+            height: sheetHeight,
+            transform: `translateY(${isOpen ? openPosition : closedPosition})`,
+            zIndex: 50, // Higher than backdrop
           }}
         >
           {/* Sheet Content */}
@@ -335,32 +230,25 @@ const Portfolio = () => {
                 : "bg-white/70 border-gray-200/50 backdrop-blur-xl"
             }`}
           >
-            {/* Draggable Handle */}
-            <div
-              className="w-full py-4 touch-none cursor-grab active:cursor-grabbing select-none relative"
-              onMouseDown={handleMouseDown}
-              onTouchStart={handleTouchStart}
-            >
+            {/* Handle and Toggle Button */}
+            <div className="w-full py-4 touch-none select-none relative">
               <div
                 className={`w-12 h-1 mx-auto rounded-full ${
                   darkMode ? "bg-gray-600" : "bg-gray-300"
                 }`}
               />
               <button
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevent triggering drag events
-                  handleOpen();
-                }}
+                onClick={() => setIsOpen(!isOpen)}
                 className={`absolute right-4 top-2 text-sm ${
                   darkMode
                     ? "text-gray-400 hover:text-gray-300"
                     : "text-gray-600 hover:text-gray-800"
                 }`}
               >
-                Open
+                {isOpen ? "Close" : "Open"}
               </button>
             </div>
-  
+    
             {/* Projects Header */}
             <div className="px-6">
               <h2
@@ -371,11 +259,10 @@ const Portfolio = () => {
                 Projects
               </h2>
             </div>
-  
+    
             {/* Projects List */}
             <div
               className="px-6 overflow-y-auto"
-              style={{ height: "calc(100% - 80px)" }}
             >
               <div className="space-y-3">
                 {projects.map((project, index) => (
@@ -422,38 +309,37 @@ const Portfolio = () => {
       </>
     );
   };
-  
-    
+
   const MobileLayout = () => {
     const [showEmailForm, setShowEmailForm] = useState(false);
-    const [emailSubject, setEmailSubject] = useState('');
-    const [emailMessage, setEmailMessage] = useState('');
+    const [emailSubject, setEmailSubject] = useState("");
+    const [emailMessage, setEmailMessage] = useState("");
     const cardsRef = useRef([]);
-  
+
     useEffect(() => {
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              entry.target.classList.add('translate-y-0', 'opacity-100');
+              entry.target.classList.add("translate-y-0", "opacity-100");
             }
           });
         },
         {
           threshold: 0.1,
-          rootMargin: '-10% 0px -10% 0px'
+          rootMargin: "-10% 0px -10% 0px",
         }
       );
-  
+
       cardsRef.current.forEach((card) => {
         if (card) {
           observer.observe(card);
         }
       });
-  
+
       return () => observer.disconnect();
     }, []);
-  
+
     return (
       <div className="flex flex-col my-auto ">
         {/* Profile Section */}
@@ -482,7 +368,7 @@ const Portfolio = () => {
             >
               AI Engineer & Full Stack Developer based in Singapore
             </p>
-  
+
             {/* Social Links */}
             <div className="flex gap-4 mb-8">
               <a
@@ -520,7 +406,7 @@ const Portfolio = () => {
             </div>
           </div>
         </div>
-  
+
         {/* Experiences Section */}
         <div className="px-4 mb-8">
           <h2 className="text-sm text-gray-500 uppercase mb-2">Experiences</h2>
@@ -538,7 +424,7 @@ const Portfolio = () => {
             ))}
           </div>
         </div>
-  
+
         {/* About Section */}
         <div className="px-6 mb-8">
           <h2 className="text-sm text-gray-500 uppercase mb-2">About</h2>
@@ -553,7 +439,7 @@ const Portfolio = () => {
             user-centric applications.
           </p>
         </div>
-  
+
         {/* Floating Bottom Navbar */}
         <div
           className={`fixed bottom-28 left-1/2 transform -translate-x-1/2 flex items-center gap-4 px-6 py-3 rounded-full shadow-lg z-100 backdrop-blur-lg bg-opacity-20 z-100 ${
@@ -566,12 +452,12 @@ const Portfolio = () => {
           <button onClick={() => setIsSearchOpen(true)} className="py-2 px-2 ">
             <span className="text-sm">Ask me anything</span>
           </button>
-  
+
           {/* Font Toggle */}
           <button onClick={toggleFont} className="p-2">
             <span className="text-md">Aa</span>
           </button>
-  
+
           {/* Dark Mode Toggle */}
           <button onClick={toggleDarkMode} className="p-2">
             {darkMode ? (
@@ -580,7 +466,7 @@ const Portfolio = () => {
               <Sun className="w-6 h-6" />
             )}
           </button>
-  
+
           <a
             href={resume}
             download
@@ -589,7 +475,7 @@ const Portfolio = () => {
             <Download className="w-6 h-6" />
           </a>
         </div>
-  
+
         {/* Email Form Popup */}
         {showEmailForm && (
           <div
@@ -649,13 +535,13 @@ const Portfolio = () => {
             </div>
           </div>
         )}
-    
+
         {/* Bottom Sheet Projects */}
         <BottomSheet projects={projects} darkMode={darkMode} />
       </div>
     );
   };
-  
+
   return (
     <div
       className={`min-h-screen ${
