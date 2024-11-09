@@ -14,6 +14,8 @@ import {
 import profileImage from "./assets/profile-pic.jpg";
 import resume from "./assets/Resume.pdf";
 import CommandSearch from "./components/CommandSearch";
+import ProjectsBottomSheet from "./components/BottomSheet";
+
 
 const Portfolio = () => {
   const [showPreviousRoles, setShowPreviousRoles] = useState(false);
@@ -301,42 +303,12 @@ const Portfolio = () => {
       </div>
 
       {/* Projects Section */}
-      <div className="px-6 mb-8">
-        <h2 className="text-sm text-gray-500 uppercase mb-2">Projects</h2>
-        <div className="space-y-3 ">
-          {projects.map((project, index) => (
-            <a
-              key={index}
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`flex items-center justify-between group px-4 py-7 transition-colors duration-300 border rounded-lg ${ darkMode? "border-gray-700" : "border-gray-300"}`}
-            >
-              <div>
-                <h3
-                  className={`text-md font-medium transition-colors ${
-                    darkMode ? "text-white" : "text-gray-900"
-                  }`}
-                >
-                  {project.title}
-                </h3>
-                <h6
-                  className={`text-xs transition-colors ${
-                    darkMode ? "text-gray-400" : "text-gray-900"
-                  }`}
-                >
-                  {project.description}
-                </h6>
-              </div>
-              <ArrowRight className="w-5 h-5 text-gray-500 flex-shrink-0 ml-4" />
-            </a>
-          ))}
-        </div>
-      </div>
+    {/* Projects Bottom Sheet */}
+    <ProjectsBottomSheet projects={projects} darkMode={darkMode} />
 
       {/* Floating Bottom Navbar */}
       <div
-        className={`fixed bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-4 px-6 py-3 rounded-full shadow-lg z-50 backdrop-blur-lg bg-opacity-20 ${
+        className={`fixed bottom-28 left-1/2 transform -translate-x-1/2 flex items-center gap-4 px-6 py-3 rounded-full shadow-lg z-0 backdrop-blur-lg bg-opacity-20 ${
           darkMode
             ? "bg-gray-800 border border-gray-700"
             : "bg-gray-200 border border-gray-300"
